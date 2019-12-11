@@ -16,13 +16,15 @@ app = Flask(__name__)
 
 @app.route("/v1/heads/<string>.png")
 def send_image(string):
-    if len(string) not in (6, 3):
+    if len(string) == 6:
+        color_str = string[0:2], string[2:4], string[4:6]
+    elif len(string) == 3:
+        color_str = string[0], string[1], string[2]
+        # Double up each char so that /fff.png is the same as /ffffff.png
+        color_str = (x+x for x in color_str)
+    else:
         abort(400)
 
-    l = len(str)//3
-    color_str = string[0:l], string[l:l*2], string[l*2:l*3]
-    color_str = (x+x if len(x) < 2 else x for x in color_str)
-    
     color = tuple(int(i, 16) for i in color_str)
 
     image_binary = create_head(color)
