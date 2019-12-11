@@ -21,7 +21,7 @@ def send_image(string):
 
     l = len(str)//3
     color_str = string[0:l], string[l:l*2], string[l*2:l*3]
-    color_str = map(lambda x: if len(x) < 2: x+x, color_str)
+    color_str = (x+x if len(x) < 2 else x for x in color_str)
     
     color = tuple(int(i, 16) for i in color_str)
 
